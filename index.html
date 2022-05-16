@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+<script>
+function leftArrowPressed() {
+        var element = document.getElementById("red1");
+        element.style.left = parseInt(element.style.left) - 10 + 'px';
+      }
+
+      function rightArrowPressed() {
+        var element = document.getElementById("red1");
+        element.style.left = parseInt(element.style.left) + 10 + 'px';
+
+      }
+
+      function upArrowPressed() {
+        var element = document.getElementById("red1");
+        element.style.top = parseInt(element.style.top) - 10 + 'px';
+      }
+
+      function downArrowPressed() {
+        var element = document.getElementById("red1");
+        element.style.top = parseInt(element.style.top) + 10 + 'px';
+      }
+      function spacePressed(){
+	var element = document.getElementById("bomb1");
+        var element2 = document.getElementById("red1");
+        element.style.top = parseInt(element2.style.top) +20+ 'px';
+        element.style.left = parseInt(element2.style.left) +10+ 'px';
+      }
+
+      function moveSelection(evt) {
+        switch (evt.keyCode) {
+          case 32:
+	    spacePressed();
+	    break;
+	  case 37:
+            leftArrowPressed();
+            break;
+          case 39:
+            rightArrowPressed();
+            break;
+          case 38:
+            upArrowPressed();
+            break;
+          case 40:
+            downArrowPressed();
+            break;
+        }
+      };	
+	function docReady() {
+        window.addEventListener('keydown', moveSelection);
+      }
+</script>
+</head>
+<body onload="docReady();" onkeydown="" onkeyup="">
+<img class="overlayImage" src="./assets/board1.png" id="board1">
+<img class="overlayImage" src="./assets/floor1.png" id="floor1">
+<img class="overlayImage" src="./assets/blockers1.png" id="blockers1">
+<img src="./assets/bomb1.png" style="position:absolute;left:0;top:0;" id="bomb1">
+<img src="./assets/red1.png" style="position:absolute;left:0;top:0;" id="red1">
+
+</body>
+</html>
+
