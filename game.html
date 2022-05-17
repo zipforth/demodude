@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+<script>
+var down = [140];
+var timers = [];
+var timersize = 0;
+var p2bcount=1;
+var p2brad=2;
+var p1bcount=1;
+var p1brad=2;
+//left
+down[37]=false;
+//up
+down[38]=false;
+//right
+down[39]=false;
+//down
+down[40]=false;
+//space
+down[32]=false;
+
+//shift
+down[16]=false;
+//w
+down[87]=false;
+//a
+down[65]=false;
+//s
+down[83]=false;
+//d
+down[68]=false;
+
+function leftArrowPressed(player) {
+        var element = document.getElementById(player);
+        if(parseInt(element.style.left)>35 && checkRight(parseInt(element.style.top)+50,parseInt(element.style.left),player))
+        {
+		element.style.left = parseInt(element.style.left) - 10 + 'px';
+      	}
+}
+
+      function rightArrowPressed(player) {
+        var element = document.getElementById(player);
+        if(parseInt(element.style.left)<670 && checkRight(parseInt(element.style.top)+50,parseInt(element.style.left)+50,player))
+	{
+		element.style.left = parseInt(element.style.left) + 10 + 'px';
+        }	
+      }
+
+      function upArrowPressed(player) {
+        var element = document.getElementById(player);
+        if(parseInt(element.style.top)>20 && checkRight(parseInt(element.style.top)+10,parseInt(element.style.left)+30,player))
+        {
+		element.style.top = parseInt(element.style.top) - 10 + 'px';
+      	}
+	}
+
+      function downArrowPressed(player) {
+        var element = document.getElementById(player);
+        if(parseInt(element.style.top)<420 && checkRight(parseInt(element.style.top)+65,parseInt(element.style.left)+30,player))
+        {
+		element.style.top = parseInt(element.style.top) + 10 + 'px';
+      	}
+	}
+      function spacePressed(player){
+	count=0;
+	switch(player)
+	{
+	case "p1":
+		count=p1bcount;
+	break;
+	case "p2":
+		count=p2bcount;
+	break;
+
+	}
+	if(count > 0)
+	{
+	switch(player)
+	{
+	case "p1":
+		p1bcount--;
+	break;
+	case "p2":
+		p2bcount--;
+	break;
+
+	}
+	count--;
+//	var element = document.getElementById("bomb1");
+	var element = new Image(40,40);
+	element.src = "./assets/bomb1.png";
+        element.style.position = "absolute";
+	var element2 = document.getElementById(player);
+        element.style.top = parseInt(element2.style.top) +20+ 'px';
+        element.style.left = parseInt(element2.style.left) +10+ 'px';
+	//[timer, top, left, radius, L,R,U,D stop keys]
+	var units = [30, parseInt(element.style.top),parseInt(element.style.left),0,true,true,true,true,[],[],[],[],player];
+	timers.push(units);
+	timersize++;
+	console.log(element.style.top);
+	console.log(element.style.left);
+	document.getElementById("gamescreen").appendChild(element);
+	}
+      }
+	function checkRight(t,l,player)
+	{
+		let els=document.elementsFromPoint(l,t);
+		for(var i = 0; i< els.length; i++)
+		{
+			var el = els[i];
+			if (typeof el.src === "undefined")
+			{
+				
+			}
+			else
+			{
+				if (el.src.includes("breaker") || el.src.includes("bomb")|| el.src.includes("blocker"))
+				{
+					return false;
+				}
+				if (el.src.includes("up"))
+				{
+					rad=0;
+					bcount=0;
+					if(el.src.includes("power"))
+					{
+						rad++;
+					}
+					else
+					{
+						bcount++;
+					}
+					switch(player)
+					{
+					case "p1":
+						p1brad=p1brad+rad;
+						p1bcount=p1bcount+bcount;
+					break;
+					case "p2":
+						p2brad=p2brad+rad;
+						p2bcount=p2bcount+bcount;
+					break;
+					}
+					document.getElementById("gamescreen").removeChild(el);
+				}
+			}
+		}
+		return true;
+	}
+
+      function moveSelection() {
+        if(down[16])
+	{
+		spacePressed("p2");
+		down[16]=false;
+	}  
+        if(down[65])
+	{
+		leftArrowPressed("p2");
+	}  
+        if(down[87])
+	{
+		upArrowPressed("p2");
+	}  
+        if(down[68])
+	{
+		rightArrowPressed("p2");
+	}  
+        if(down[83])
+	{
+		downArrowPressed("p2");
+	}
+        if(down[32])
+	{
+		spacePressed("p1");
+		down[32]=false;
+	}  
+        if(down[37])
+	{
+		leftArrowPressed("p1");
+	}  
+        if(down[38])
+	{
+		upArrowPressed("p1");
+	}  
+        if(down[39])
+	{
+		rightArrowPressed("p1");
+	}  
+        if(down[40])
+	{
+		downArrowPressed("p1");
+	}
+	var dec=0;
+	for( let i = timersize-1; i >=0 ; i--)
+	{
+		if(timers[i][0]==0)
+		{
+			let els=document.elementsFromPoint(timers[i][2],timers[i][1]);
+			for(var j = 0; j< els.length; j++)
+			{
+				var el = els[j];
+				if (typeof el.src === "undefined")
+				{
+					
+				}
+				else
+				{
+					if (el.src.includes("bomb"))
+					{
+						el.src="./assets/blastC1.png";
+						//el.parentNode=document.getElementById("gamescreen");
+						timers[i].push(el);
+						switch(timers[i][12])
+						{
+						case "p1":
+							p1bcount++;
+						break;
+						case "p2":
+							p2bcount++;
+						break;
+						}
+					}
+				}
+			}
+			//8-11 arrays for directions
+			rad=0;
+			switch(timers[i][12])
+			{
+			case "p1":
+				rad=p1brad;
+			break;
+			case "p2":
+				rad=p2brad;
+			break;
+			}
+			
+			if(timers[i][3]<rad)
+			{
+				strL="";
+				strR="";
+				strU="";
+				strD="";
+				timers[i][3]++;
+				if(timers[i][3]==rad)
+				{	
+				strL="L";
+				strR="R";
+				strU="U";
+				strD="D";
+				}
+				//down,then up
+				if(timers[i][7])
+				{
+					
+					el1=radiusBuilder("V"+strD,i,40*timers[i][3],0,7);
+					
+					if( typeof(el1) === "object")
+					timers[i][11].push(el1);					
+				
+				}
+				if(timers[i][6])
+				{
+					el2 = radiusBuilder("V"+strU,i,-40*timers[i][3],0,6);
+					if( typeof(el2) === "object")
+					timers[i][10].push(el2);					
+				}
+				//right,then left
+
+				if(timers[i][5])
+				{
+					el3 = radiusBuilder("H"+strR,i,0,40*timers[i][3],5);
+					if( typeof(el3) === "object")
+					timers[i][9].push(el3);					
+				}
+				if(timers[i][4])
+				{
+					el4 = radiusBuilder("H"+strL,i,0,-40*timers[i][3],4);
+					if( typeof(el4) === "object")
+					timers[i][8].push(el4);					
+				}
+			}
+			else	
+			{
+				timers[i][3]++;
+				if(timers[i][3] > (rad+20))
+				{
+					if(timers[i][3]==(rad+21))
+					{
+						document.getElementById("gamescreen").removeChild(timers[i][13]);
+						timers[i].splice(13,1);
+					}
+					else
+					{	
+						if(timers[i][8].length==0 && timers[i][9].length==0 &&  timers[i][10].length==0 && timers[i][11].length==0)
+						{		
+							timersize--;
+							timers.splice(i,1);
+						}
+						else
+						{	
+							if(timers[i][8].length > 0)
+							{
+							document.getElementById("gamescreen").removeChild(timers[i][8][0]);
+							timers[i][8].splice(0,1);
+							}
+							if(timers[i][9].length > 0)
+							{
+							document.getElementById("gamescreen").removeChild(timers[i][9][0]);
+							timers[i][9].splice(0,1);
+							}
+							if(timers[i][10].length > 0)
+							{
+							document.getElementById("gamescreen").removeChild(timers[i][10][0]);
+							timers[i][10].splice(0,1);
+							}
+							if(timers[i][11].length > 0)
+							{
+							document.getElementById("gamescreen").removeChild(timers[i][11][0]);
+							timers[i][11].splice(0,1);
+							}
+						}
+					}
+				}
+				else
+				{
+				}
+			}
+		}
+		else
+		{
+			timers[i][0]--;
+		}
+	}
+      };
+	function radiusBuilder(im,arr,t,l,dir)
+	{
+		var flag=true;
+		if(timers[arr][dir])
+		{		
+			let els=document.elementsFromPoint(timers[arr][2]+l,timers[arr][1]+t);
+			for(var j = 0; j< els.length; j++)
+			{
+				var el = els[j];
+				if (typeof el.src === "undefined")
+				{
+					
+				}
+				else
+				{
+					if (el.src.includes("blocker"))
+					{
+						timers[arr][dir]=false;
+						flag=false;
+					}
+					if (el.src.includes("breaker"))
+					{
+						timers[arr][dir]=false;
+						document.getElementById("gamescreen").removeChild(el);
+						if(Math.floor(Math.random()*100)%3==0)
+						{
+							var element = new Image(40,40);
+							if(Math.floor(Math.random()*100)%3==0)
+							{
+								element.src = "./assets/powerup1.png";
+        						}
+							else
+							{
+								element.src = "./assets/extraup1.png";
+							}
+							element.style.position = "absolute";
+       							element.style.top = timers[arr][1] +t+ 'px';
+       							element.style.left = timers[arr][2] +l+ 'px';
+							document.getElementById("gamescreen").appendChild(element);
+						}
+					}
+				}
+			}
+			if(flag)
+			{
+				var element = new Image(40,40);
+				element.src = "./assets/blast"+im+"1.png";
+        			element.style.position = "absolute";
+       				element.style.top = timers[arr][1] +t+ 'px';
+       				element.style.left = timers[arr][2] +l+ 'px';
+				document.getElementById("gamescreen").appendChild(element);
+				//element.parentNode=document.getElementById("gamescreen");
+				return element;
+			}
+		}
+	}
+	setInterval(moveSelection,100);
+	document.onkeydown=e => {
+		if( !down[e.keyCode]){
+			down[e.keyCode] = true;
+			if(e.keyCode < 45 && e.keyCode != 16)
+			{
+				for (let i = 37; i <=40 ; i++)
+				{
+					if( i != e.keyCode && e.keyCode != 32)
+					{
+						down[i]=false;
+					}
+	
+				} 
+			}
+			else
+			{
+				var keys= [65,68,87.83];
+				for (let i = 0; i <4 ; i++)
+				{
+					if( i != e.keyCode && e.keyCode != 16)
+					{
+						down[i]=false;
+					}
+	
+				} 
+			}
+		}
+	};
+	document.onkeyup=e => (down[e.keyCode] = false);
+	
+</script>
+</head>
+<body id="gamescreen">
+<img class="overlayImage" src="./assets/board1.png" id="board1">
+<img class="overlayImage" src="./assets/floor1.png" id="floor1">
+<script>
+	function placeBreaker(x,y)
+	{
+		var element = new Image(40,40);
+		element.src = "./assets/breaker1.png";
+        	element.style.position = "absolute";
+		//element.style.zIndex = "1";
+        	element.style.top = y+ 'px';
+        	element.style.left = x+ 'px';
+		document.getElementById("gamescreen").appendChild(element);
+	}
+	function placeBlocker(x,y)
+	{
+		var element = new Image(40,40);
+		element.src = "./assets/blocker1.png";
+        	element.style.position = "absolute";
+		//element.style.zIndex = "1";
+        	element.style.top = y+ 'px';
+        	element.style.left = x+ 'px';
+		document.getElementById("gamescreen").appendChild(element);
+	}
+	for ( let i = 40 ; i<=680 ; i+=40)
+	{
+		for ( let j = 80 ; j<=400 ; j+=40)
+		{
+			if( i%80 != 0 || j%80 != 0)
+			{
+				if( (Math.floor(Math.random()*100))%4 ==0)
+				{
+					placeBreaker(i,j);
+				}
+			}
+			else
+			{
+				placeBlocker(i,j);
+			}
+		}
+	}
+
+	
+</script>
+
+<img class="overlayImage" src="./assets/red1.png" style="position:absolute;top:0;left:0;" id="p1">
+<img class="overlayImage" src="./assets/blue1.png" style="position:absolute;top:0;left:0;" id="p2">
+<script>
+
+	var player = document.getElementById("p1");
+        player.style.top = 20+ 'px';
+        player.style.left = 30+ 'px';
+	
+
+	var player2 = document.getElementById("p2");
+        player2.style.top = 420+ 'px';
+        player2.style.left = 30+ 'px';
+//	player.style.zIndex = "2";	
+</script>
+</body>
+</html>
+
