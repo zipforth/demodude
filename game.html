@@ -95,6 +95,10 @@ function leftArrowPressed(player) {
 	var element2 = document.getElementById(player);
         element.style.top = parseInt(element2.style.top) +20+ 'px';
         element.style.left = parseInt(element2.style.left) +10+ 'px';
+	var topadj= Math.round(parseInt(element.style.top)/40)*40;
+	var leftadj= Math.round(parseInt(element.style.left)/40)*40;
+	element.style.top = topadj+'px';
+	element.style.left= leftadj+'px';
 	//[timer, top, left, radius, L,R,U,D stop keys]
 	var units = [30, parseInt(element.style.top),parseInt(element.style.left),0,true,true,true,true,[],[],[],[],player];
 	timers.push(units);
@@ -157,6 +161,76 @@ function leftArrowPressed(player) {
 		return true;
 	}
 
+//I think the reason this doesn't work is because it assumes a clear field.
+//without the blocker tiles, it functions as expected
+//but the blockers mean it might choose to align to a row/column it shouldn't
+//alignment should ignore aligning to a set of positions where left/top can both be %80
+function aligner(player)
+{
+	var el = document.getElementById(player);
+	var topratio=(parseInt(el.style.top)+20)%40; 
+	var leftratio=(parseInt(el.style.left)+10)%40; 
+	if(topratio==0 || leftratio==0)
+	{
+		
+	} 
+	else
+	{
+		if( Math.abs(20-topratio) > Math.abs(20-leftratio))
+		{
+			el.style.top= ((Math.round(parseInt(el.style.top)/40)*40)-20) + 'px';
+			//set top to be aligned to 40
+		}
+		else
+		{
+			if( Math.abs(20-topratio) < Math.abs(20-leftratio))
+			{
+				el.style.left= ((Math.round(parseInt(el.style.left)/40)*40)-10) + 'px';
+				//set left to be aligned to 40
+			}
+			else
+			{
+				if(player.includes("2"))
+				{
+					if(down[65]||down[68])
+					{
+
+						
+						el.style.top= ((Math.round(parseInt(el.style.top)/40)*40)-20) + 'px';
+					}
+					else
+					{
+						el.style.left= ((Math.round(parseInt(el.style.left)/40)*40)-10) + 'px';
+						
+					}
+
+				}
+				else
+				{
+
+					if(down[37]||down[39])
+					{
+						
+						el.style.top= ((Math.round(parseInt(el.style.top)/40)*40)-20) + 'px';
+					}
+					else
+					{
+						
+						el.style.left= ((Math.round(parseInt(el.style.left)/40)*40)-10) + 'px';
+					}
+
+
+				}
+				//pick the one with the movement==true
+
+			}
+		}
+	}
+}
+
+
+//player is offset 20t,30l
+//from 40t,40l, it's -20t, -10l off
       function moveSelection() {
         if(down[16])
 	{
@@ -200,6 +274,8 @@ function leftArrowPressed(player) {
 	{
 		downArrowPressed("p1");
 	}
+	//aligner("p2");
+	//aligner("p1");	
 	var dec=0;
 	for( let i = timersize-1; i >=0 ; i--)
 	{
