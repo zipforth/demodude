@@ -90,7 +90,7 @@ function leftArrowPressed(player) {
 	count--;
 //	var element = document.getElementById("bomb1");
 	var element = new Image(40,40);
-	element.src = "./assets/bomb1.png";
+	element.src = "./assets/bomb1.gif";
         element.style.position = "absolute";
 	var element2 = document.getElementById(player);
         element.style.top = parseInt(element2.style.top) +20+ 'px';
@@ -122,6 +122,12 @@ function leftArrowPressed(player) {
 				}
 				if (el.src.includes("up"))
 				{
+					if(el.src.includes(".png"))
+					{
+						document.getElementById("gamescreen").removeChild(el);
+					}
+					else
+					{
 					rad=0;
 					bcount=0;
 					if(el.src.includes("power"))
@@ -144,6 +150,7 @@ function leftArrowPressed(player) {
 					break;
 					}
 					document.getElementById("gamescreen").removeChild(el);
+					}
 				}
 			}
 		}
@@ -362,14 +369,21 @@ function leftArrowPressed(player) {
 						if(Math.floor(Math.random()*100)%3==0)
 						{
 							var element = new Image(40,40);
+							var backing = new Image(40,40);
 							if(Math.floor(Math.random()*100)%3==0)
 							{
-								element.src = "./assets/powerup1.png";
+								element.src = "./assets/powerup1.gif";
+								backing.src = "./assets/powerup1.png";
         						}
 							else
 							{
-								element.src = "./assets/extraup1.png";
+								element.src = "./assets/extraup1.gif";
+								backing.src = "./assets/extraup1.png";
 							}
+							backing.style.position = "absolute";
+       							backing.style.top = timers[arr][1] +t+ 'px';
+       							backing.style.left = timers[arr][2] +l+ 'px';
+							document.getElementById("gamescreen").appendChild(backing);
 							element.style.position = "absolute";
        							element.style.top = timers[arr][1] +t+ 'px';
        							element.style.left = timers[arr][2] +l+ 'px';
