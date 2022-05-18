@@ -1,11 +1,29 @@
  <html>
           <body>
-          <div style="width:760px; height:520px; background-color:#000000;text-align:center;">
-            <img src="./assets/banner.png" style="margin-top:20px;"><br/>    
-            <form style="text-align:center;font-family:Trebuchet MS;">
-              <b>Start Menu</b><br/>
-              <?var url = getUrl();?><a href='./game.html'><input type='button' name='test' value='START' style="width:455px"></a>
-            </form>
-	  </div>
+          	<div style="width:760px; height:520px; background-color:#000000;text-align:center;">
+            		<img src="./assets/banner.png" style="margin-top:20px;"><br/>    
+            	<form style="text-align:center;font-family:Trebuchet MS;">
+              		<font color="white">
+	      			<b>Start Menu</b><br/>
+				</br>	
+				</font>
+
+			<div style="float:center;">
+              		<font color="white">
+				<b>Single Player against:</b>
+              			<?var url = getUrl();?><a href='./game.html'><input type='button' name='1p1e' value='1' style="width:30px"></a>
+              			<?var url = getUrl();?><a href='./game.html'><input type='button' name='1p2e' value='2' style="width:30px"></a>
+              			<?var url = getUrl();?><a href='./game.html'><input type='button' name='1p3e' value='3' style="width:30px"></a>
+				</br>
+			</font>	
+			</div>
+			<div style="align:center;">
+			</br>
+              			<?var url = getUrl();?><a href='./multi.html'><input type='button' name='multi' value='MULTIPLAYER' style="width:455px"></a>
+              			<?var url = getUrl();?><a href='./settings.html'><input type='button' name='sets' value='SETTINGS' style="width:455px"></a>
+              			<?var url = getUrl();?><a href='./about.html'><input type='button' name='about' value='ABOUT' style="width:455px"></a>
+            		</div>
+		</form>
+	  	</div>
           </body>
-     </html>
+</html>
