@@ -1,14 +1,16 @@
  <html>
           <body>
 		<script>
-			document.cookie = "playerNum=0;path=/";
+			document.cookie = "playerNum=1;path=/";
 			function setcookie(num,cook)
 			{
 				document.cookie= cook + "="+num+";path=/";
 			}
 		
 		</script>
-		<meta name="playerNum" content="0" />
+		<meta name="playerNum" content="1" />
+		<meta name="envNum" content="0" />
+		<meta name="winner" content="-1" />
           	<div style="width:760px; height:520px; background-color:#000000;text-align:center;">
             		<img src="./assets/banner.png" style="margin-top:20px;"><br/>    
             	<form style="text-align:center;font-family:Trebuchet MS;">
@@ -20,9 +22,9 @@
 			<div style="float:center;">
               		<font color="white">
 				<b>Single Player against:</b>
-              			<?var url = getUrl();?><a href='./game.html'><input type='button' onclick="setcookie(1,'playerNum')" name='1p1e' value='1' style="width:30px"></a>
-              			<?var url = getUrl();?><a href='./game.html'><input type='button' name='1p2e' value='2' style="width:30px"></a>
-              			<?var url = getUrl();?><a href='./game.html'><input type='button' name='1p3e' value='3' style="width:30px"></a>
+              			<?var url = getUrl();?><a href='./game.html'><input type='button' onclick="setcookie(1,'envNum')" name='1p1e' value='1' style="width:30px"></a>
+              			<?var url = getUrl();?><a href='./game.html'><input type='button' onclick="setcookie(2,'envNum')"name='1p2e' value='2' style="width:30px"></a>
+              			<?var url = getUrl();?><a href='./game.html'><input type='button' onclick="setcookie(3,'envNum')"name='1p3e' value='3' style="width:30px"></a>
 				</br>
 			</font>	
 			</div>

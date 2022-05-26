@@ -3,6 +3,21 @@
 <head>
 <link rel="stylesheet" href="style.css">
 <script>
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
 var down = [140];
 var timers = [];
 var timersize = 0;
@@ -10,7 +25,21 @@ var p2bcount=1;
 var p2brad=2;
 var p1bcount=1;
 var p1brad=2;
-var isPlayerAlive=[true,true];
+var isPlayerAlive=[false,false,false,false];
+var isPlayer=[false,false,false,false];
+
+var cookieE=parseInt(getCookie('envNum'));
+var cookieP=parseInt(getCookie('playerNum'));
+for(let i = 0;i<cookieP;i++)
+{
+	isPlayerAlive[i]=true;
+	isPlayer[i]=true;
+}
+for(let i = cookieP;i<(cookieE+cookieP);i++)
+{
+	isPlayerAlive[i]=true;
+}
+
 //left
 down[37]=false;
 //up
@@ -522,8 +551,10 @@ function aligner(player)
 </script>
 </head>
 <body id="gamescreen">
-<img class="overlayImage" src="./assets/board1.png" id="board1">
-<img class="overlayImage" src="./assets/floor1.png" id="floor1">
+
+	<meta name="winner" content="-1" />
+	<img class="overlayImage" src="./assets/board1.png" id="board1">
+	<img class="overlayImage" src="./assets/floor1.png" id="floor1">
 <script>
 	function placeBreaker(x,y)
 	{
@@ -569,15 +600,28 @@ function aligner(player)
 <img class="overlayImage" src="./assets/red1.png" style="position:absolute;top:0;left:0;" id="p1">
 <img class="overlayImage" src="./assets/blue1.png" style="position:absolute;top:0;left:0;" id="p2">
 <script>
-
-	var player = document.getElementById("p1");
-        player.style.top = 20+ 'px';
-        player.style.left = 30+ 'px';
-	
-
-	var player2 = document.getElementById("p2");
-        player2.style.top = 420+ 'px';
-        player2.style.left = 30+ 'px';
+	if(isPlayerAlive[0])
+	{
+		var player = document.getElementById("p1");
+        	player.style.top = 20+ 'px';
+        	player.style.left = 30+ 'px';
+	}
+	else
+	{
+		var player = document.getElementById("p1");
+		document.getElementById("gamescreen").removeChild(player);
+	}
+	if(isPlayerAlive[1])
+	{
+		var player2 = document.getElementById("p2");
+        	player2.style.top = 420+ 'px';
+        	player2.style.left = 30+ 'px';
+	}
+	else
+	{
+		var player2 = document.getElementById("p2");
+		document.getElementById("gamescreen").removeChild(player2);
+	}
 //	player.style.zIndex = "2";	
 </script>
 </body>
