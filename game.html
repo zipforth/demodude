@@ -39,7 +39,7 @@ for(let i = cookieP;i<(cookieE+cookieP);i++)
 {
 	isPlayerAlive[i]=true;
 }
-
+//p1
 //left
 down[37]=false;
 //up
@@ -51,6 +51,7 @@ down[40]=false;
 //space
 down[32]=false;
 
+//p2
 //shift
 down[16]=false;
 //w
@@ -62,35 +63,39 @@ down[83]=false;
 //d
 down[68]=false;
 
-function leftArrowPressed(player) {
+function leftArrowPressed(player,x) {
         var element = document.getElementById(player);
-        if(parseInt(element.style.left)>35 && checkRight(parseInt(element.style.top)+50,parseInt(element.style.left),player))
-        {
+        //if(parseInt(element.style.left)>35 && checkRight(parseInt(element.style.top)+50,parseInt(element.style.left),player))
+       // {
 		element.style.left = parseInt(element.style.left) - 10 + 'px';
-      	}
+		element.style.top = parseInt(element.style.top)+x + 'px';
+      //	}
 }
 
-      function rightArrowPressed(player) {
+      function rightArrowPressed(player,x) {
         var element = document.getElementById(player);
-        if(parseInt(element.style.left)<670 && checkRight(parseInt(element.style.top)+50,parseInt(element.style.left)+50,player))
-	{
+       // if(parseInt(element.style.left)<670 && checkRight(parseInt(element.style.top)+50,parseInt(element.style.left)+50,player))
+//	{
 		element.style.left = parseInt(element.style.left) + 10 + 'px';
-        }	
+		element.style.top = parseInt(element.style.top)+x + 'px';
+//        }	
       }
 
-      function upArrowPressed(player) {
+      function upArrowPressed(player,x) {
         var element = document.getElementById(player);
         if(parseInt(element.style.top)>20 && checkRight(parseInt(element.style.top)+10,parseInt(element.style.left)+30,player))
         {
 		element.style.top = parseInt(element.style.top) - 10 + 'px';
+		element.style.left = parseInt(element.style.left)+x + 'px';
       	}
 	}
 
-      function downArrowPressed(player) {
+      function downArrowPressed(player,x) {
         var element = document.getElementById(player);
         if(parseInt(element.style.top)<420 && checkRight(parseInt(element.style.top)+65,parseInt(element.style.left)+30,player))
         {
 		element.style.top = parseInt(element.style.top) + 10 + 'px';
+		element.style.left = parseInt(element.style.left)+x + 'px';
       	}
 	}
       function spacePressed(player){
@@ -194,31 +199,82 @@ function leftArrowPressed(player) {
 		}
 		return true;
 	}
-
+	function vertTest(player)
+	{
+		var el = document.getElementById(player);
+		var lr=(parseInt(el.style.left)+10)%40;
+		var lblocked=(parseInt(el.style.left)+10)%80;
+		if(lblocked<12 || lr > 68)
+		{
+			return [false,0];
+		}
+		if( lr < 12 || lr > 28)
+		{
+			if (lr==0)
+				return[true,0];
+			if(lr > 20)
+				return [true,10];
+			else
+				return [true,-10];
+		}
+		return [false,0];
+	}
+	function horiTest(player)
+	{
+		var el = document.getElementById(player);
+		var tr=(parseInt(el.style.top)+20)%40;
+		var tblocked=(parseInt(el.style.top)+20)%80;
+		console.log('---------------');
+		console.log(tr);
+		console.log(tblocked);
+		if(tblocked<12 || tr > 68)
+		{
+			return [false,0];
+		}
+		if( tr < 12 || tr > 28)
+		{
+			if(tr == 0)
+				return[true,0];
+			if(tr > 20)
+				return [true,10];
+			else
+				return [true,-10];
+		}
+		return [false,0];
+	}	
 //I think the reason this doesn't work is because it assumes a clear field.
 //without the blocker tiles, it functions as expected
 //but the blockers mean it might choose to align to a row/column it shouldn't
 //alignment should ignore aligning to a set of positions where left/top can both be %80
 //if going left/right, don't align top to %80==0, vice versa for up/down
+/*
 function aligner(player)
 {
 	var el = document.getElementById(player);
 	var topratio=(parseInt(el.style.top)+20)%40; 
-	var leftratio=(parseInt(el.style.left)+10)%40; 
+	var leftratio=(parseInt(el.style.left)+10)%40;
 	if(topratio==0 || leftratio==0)
 	{
 		
-	} 
+	}
 	else
 	{
-		if( Math.abs(20-topratio) > Math.abs(20-leftratio))
+	
+	}
+/*
+	else
+	{
+		console.log(topratio);
+		console.log(leftratio); 
+		if( && Math.abs(20-topratio) > Math.abs(20-leftratio))
 		{
-			el.style.top= ((Math.round(parseInt(el.style.top)/40)*40)-20) + 'px';
+			if(((Math.round(parseInt(el.style.top)/40)*40))%80 != 0 )
+				el.style.top= ((Math.round(parseInt(el.style.top)/40)*40)-20) + 'px';
 			//set top to be aligned to 40
 		}
 		else
 		{
-			if( Math.abs(20-topratio) < Math.abs(20-leftratio))
+			if( ((Math.round(parseInt(el.style.top)/40)*40))%80!=0 && Math.abs(20-topratio) < Math.abs(20-leftratio))
 			{
 				el.style.left= ((Math.round(parseInt(el.style.left)/40)*40)-10) + 'px';
 				//set left to be aligned to 40
@@ -261,8 +317,10 @@ function aligner(player)
 			}
 		}
 	}
-}
 
+
+}
+*/
 
 //player is offset 20t,30l
 //from 40t,40l, it's -20t, -10l off
@@ -275,19 +333,35 @@ function aligner(player)
 	}  
         if(down[65])
 	{
-		leftArrowPressed("p2");
+		var temp=horiTest("p2");
+		if(temp[0])
+		{
+			leftArrowPressed("p2",temp[1]);
+		}
 	}  
         if(down[87])
 	{
-		upArrowPressed("p2");
+		var temp=vertTest("p2");
+		if(temp[0])
+		{
+			upArrowPressed("p2",temp[1]);
+		}
 	}  
         if(down[68])
 	{
-		rightArrowPressed("p2");
+		var temp=horiTest("p2");
+		if(temp[0])
+		{
+			rightArrowPressed("p2",temp[1]);
+		}
 	}  
         if(down[83])
 	{
-		downArrowPressed("p2");
+		var temp=vertTest("p2");
+		if(temp[0])
+		{
+			downArrowPressed("p2",temp[1]);
+		}
 	}
         if(down[32])
 	{
@@ -599,6 +673,8 @@ function aligner(player)
 
 <img class="overlayImage" src="./assets/red1.png" style="position:absolute;top:0;left:0;" id="p1">
 <img class="overlayImage" src="./assets/blue1.png" style="position:absolute;top:0;left:0;" id="p2">
+<img class="overlayImage" src="./assets/teal1.png" style="position:absolute;top:0;left:0;" id="p3">
+<img class="overlayImage" src="./assets/green1.png" style="position:absolute;top:0;left:0;" id="p4">
 <script>
 	if(isPlayerAlive[0])
 	{
@@ -622,7 +698,28 @@ function aligner(player)
 		var player2 = document.getElementById("p2");
 		document.getElementById("gamescreen").removeChild(player2);
 	}
-//	player.style.zIndex = "2";	
+	if(isPlayerAlive[2])
+	{
+		var player3 = document.getElementById("p3");
+        	player3.style.top = 20+ 'px';
+        	player3.style.left = 670+ 'px';
+	}
+	else
+	{
+		var player3 = document.getElementById("p3");
+		document.getElementById("gamescreen").removeChild(player3);
+	}
+	if(isPlayerAlive[3])
+	{
+		var player4 = document.getElementById("p4");
+        	player4.style.top = 420+ 'px';
+        	player4.style.left = 670+ 'px';
+	}
+	else
+	{
+		var player4 = document.getElementById("p4");
+		document.getElementById("gamescreen").removeChild(player4);
+	}
 </script>
 </body>
 </html>
