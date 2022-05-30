@@ -1,12 +1,77 @@
 <html>
-	<body style="text-align:center;">
-	<b>GAME OVER</b>
-	</b>
-	<b>______ WINS</b>
-	</b>
-	<div style="float:center;">
-		<?var url = getUrl();?><a href='./index.html'><input type='button' name='MENU' value='MENU' style="margin-right:50px"></a>
-		<?var url = getUrl();?><a href='./game.html'><input type='button' name='PLAY AGAIN' value='PLAY AGAIN' style="margin-left:50px"></a>
-	</div>
+	<body>
+		<font color="white">
+		<div id="overscreen" style="width:760px; height:520px;text-align:center;background-color:#000000;">
+			<div id="textarea">
+				
+			</div>
+			<div id="picdiv" style="width:300px;height:70px;background-color:gray;text-align:center;margin: 0 auto;">
+				
+			</div>
+			<script>
+				function getCookie(cname) {
+				let name = cname + "=";
+				let decodedCookie = decodeURIComponent(document.cookie);
+				let ca = decodedCookie.split(';');
+				for(let i = 0; i <ca.length; i++) {
+				    let c = ca[i];
+				    while (c.charAt(0) == ' ') {
+				    	c = c.substring(1);
+				    }
+				    if (c.indexOf(name) == 0) {
+				    	return c.substring(name.length, c.length);
+				    }
+				}
+				  return "";
+				}
+				var div= document.getElementById("textarea");
+				div.innerHTML= "<b>GAME OVER</b></b></br></br><b>PLAYER  "+getCookie("winner")+"  WINS</b></br>";
+				var picdiv= document.getElementById("picdiv");
+				
+				for(let i = 0;i<(parseInt(getCookie("winner"))-1);i++)
+				{
+					var ghost= new Image();
+					ghost.src="./assets/ghost1.png";
+					picdiv.appendChild(ghost);
+					console.log("this should have run");	
+				}
+				playersrc="";
+				switch(parseInt(getCookie("winner")))
+				{
+
+				case 1:
+					playersrc="./assets/red1.png";
+				break;
+				case 2:
+					playersrc="./assets/blue1.png";
+				break;
+				case 3:
+					playersrc="./assets/teal1.png";
+				break;
+				case 4:
+					playersrc="./assets/green1.png";
+				break;
+				}
+				var player= new Image();
+				player.src=playersrc;		
+				player.style.margin = "0 auto";
+				picdiv.appendChild(player);
+				
+				for(let i = parseInt(getCookie("winner"));i<(parseInt(getCookie("envNum"))+parseInt(getCookie("playerNum")));i++)
+				{
+					var ghost= new Image();
+					ghost.src="./assets/ghost1.png";		
+					picdiv.appendChild(ghost);
+					console.log("this should have run");	
+				}
+				
+		</script>
+			<div>
+				</br>
+				<?var url = getUrl();?><a href='./index.html'><input type='button' name='MENU' value='MENU' style="margin-right:50px"></a>
+				<?var url = getUrl();?><a href='./game.html'><input type='button' name='PLAY AGAIN' value='PLAY AGAIN' style="margin-left:50px"></a>
+			</div>
+		</div>
+		</font>
 	</body>
 </html>

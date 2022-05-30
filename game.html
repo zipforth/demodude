@@ -3,6 +3,12 @@
 <head>
 <link rel="stylesheet" href="style.css">
 <script>
+function blank(k)
+{
+	document.cookie = "winner="+(k+1)+";path=/";
+	window.location="./over.html";
+	window.location.href="./over.html";
+}
 function getCookie(cname) {
   let name = cname + "=";
   let decodedCookie = decodeURIComponent(document.cookie);
@@ -27,7 +33,6 @@ var p1bcount=1;
 var p1brad=2;
 var isPlayerAlive=[false,false,false,false];
 var isPlayer=[false,false,false,false];
-
 var cookieE=parseInt(getCookie('envNum'));
 var cookieP=parseInt(getCookie('playerNum'));
 for(let i = 0;i<cookieP;i++)
@@ -39,6 +44,7 @@ for(let i = cookieP;i<(cookieE+cookieP);i++)
 {
 	isPlayerAlive[i]=true;
 }
+var numPlayers=cookieE+cookieP;
 //p1
 //left
 down[37]=false;
@@ -65,20 +71,20 @@ down[68]=false;
 
 function leftArrowPressed(player,x) {
         var element = document.getElementById(player);
-        //if(parseInt(element.style.left)>35 && checkRight(parseInt(element.style.top)+50,parseInt(element.style.left),player))
-       // {
+        if(parseInt(element.style.left)>35 && checkRight(parseInt(element.style.top)+30,parseInt(element.style.left),player))
+        {
 		element.style.left = parseInt(element.style.left) - 10 + 'px';
 		element.style.top = parseInt(element.style.top)+x + 'px';
-      //	}
+      	}
 }
 
       function rightArrowPressed(player,x) {
         var element = document.getElementById(player);
-       // if(parseInt(element.style.left)<670 && checkRight(parseInt(element.style.top)+50,parseInt(element.style.left)+50,player))
-//	{
+        if(parseInt(element.style.left)<670 && checkRight(parseInt(element.style.top)+30,parseInt(element.style.left)+50,player))
+	{
 		element.style.left = parseInt(element.style.left) + 10 + 'px';
 		element.style.top = parseInt(element.style.top)+x + 'px';
-//        }	
+        }	
       }
 
       function upArrowPressed(player,x) {
@@ -242,85 +248,6 @@ function leftArrowPressed(player,x) {
 		}
 		return [false,0];
 	}	
-//I think the reason this doesn't work is because it assumes a clear field.
-//without the blocker tiles, it functions as expected
-//but the blockers mean it might choose to align to a row/column it shouldn't
-//alignment should ignore aligning to a set of positions where left/top can both be %80
-//if going left/right, don't align top to %80==0, vice versa for up/down
-/*
-function aligner(player)
-{
-	var el = document.getElementById(player);
-	var topratio=(parseInt(el.style.top)+20)%40; 
-	var leftratio=(parseInt(el.style.left)+10)%40;
-	if(topratio==0 || leftratio==0)
-	{
-		
-	}
-	else
-	{
-	
-	}
-/*
-	else
-	{
-		console.log(topratio);
-		console.log(leftratio); 
-		if( && Math.abs(20-topratio) > Math.abs(20-leftratio))
-		{
-			if(((Math.round(parseInt(el.style.top)/40)*40))%80 != 0 )
-				el.style.top= ((Math.round(parseInt(el.style.top)/40)*40)-20) + 'px';
-			//set top to be aligned to 40
-		}
-		else
-		{
-			if( ((Math.round(parseInt(el.style.top)/40)*40))%80!=0 && Math.abs(20-topratio) < Math.abs(20-leftratio))
-			{
-				el.style.left= ((Math.round(parseInt(el.style.left)/40)*40)-10) + 'px';
-				//set left to be aligned to 40
-			}
-			else
-			{
-				if(player.includes("2"))
-				{
-					if(down[65]||down[68])
-					{
-
-						
-						el.style.top= ((Math.round(parseInt(el.style.top)/40)*40)-20) + 'px';
-					}
-					else
-					{
-						el.style.left= ((Math.round(parseInt(el.style.left)/40)*40)-10) + 'px';
-						
-					}
-
-				}
-				else
-				{
-
-					if(down[37]||down[39])
-					{
-						
-						el.style.top= ((Math.round(parseInt(el.style.top)/40)*40)-20) + 'px';
-					}
-					else
-					{
-						
-						el.style.left= ((Math.round(parseInt(el.style.left)/40)*40)-10) + 'px';
-					}
-
-
-				}
-				//pick the one with the movement==true
-
-			}
-		}
-	}
-
-
-}
-*/
 
 //player is offset 20t,30l
 //from 40t,40l, it's -20t, -10l off
@@ -370,22 +297,36 @@ function aligner(player)
 	}  
         if(down[37])
 	{
-		leftArrowPressed("p1");
+		var temp=horiTest("p1");
+		if(temp[0])
+		{	
+			leftArrowPressed("p1",temp[1]);
+		}
 	}  
         if(down[38])
 	{
-		upArrowPressed("p1");
+		var temp=vertTest("p1");
+		if(temp[0])
+		{	
+			upArrowPressed("p1",temp[1]);
+		}
 	}  
         if(down[39])
 	{
-		rightArrowPressed("p1");
+		var temp=horiTest("p1");
+		if(temp[0])
+		{	
+			rightArrowPressed("p1",temp[1]);
+		}
 	}  
         if(down[40])
 	{
-		downArrowPressed("p1");
+		var temp=vertTest("p1");
+		if(temp[0])
+		{	
+			downArrowPressed("p1",temp[1]);
+		}
 	}
-	//aligner("p2");
-	//aligner("p1");	
 	var dec=0;
 	for( let i = timersize-1; i >=0 ; i--)
 	{
@@ -548,7 +489,50 @@ function aligner(player)
 						timers[arr][dir]=false;
 						flag=false;
 					}
-					if (el.src.includes("breaker"))
+					if(el.src.includes("blue"))
+					{
+						console.log("player 2 KO");
+						isPlayerAlive[1]=false;
+						document.getElementById("gamescreen").removeChild(el);
+						numPlayers--;						
+					}
+					if(el.src.includes("red"))
+					{
+						console.log("player 1 KO");
+						isPlayerAlive[0]=false;
+						document.getElementById("gamescreen").removeChild(el);						
+						numPlayers--;						
+					}
+					if(el.src.includes("teal"))
+					{
+						isPlayerAlive[2]=false;
+						document.getElementById("gamescreen").removeChild(el);						
+						numPlayers--;						
+					}
+					if(el.src.includes("green"))
+					{
+						isPlayerAlive[3]=false;
+						document.getElementById("gamescreen").removeChild(el);						
+						numPlayers--;						
+					}
+					if(numPlayers==1)
+					{
+						for(let k=0;k<4;k++)
+						{
+							if(isPlayerAlive[k])
+							{
+								setTimeout(blank,2000,k);
+								
+							}
+						}
+					}
+					if(numPlayers==0)
+					{
+						document.cookie="winner=0;path=/";
+						window.open("./over.html");
+
+					}
+					if(el.src.includes("breaker"))
 					{
 						timers[arr][dir]=false;
 						document.getElementById("gamescreen").removeChild(el);
