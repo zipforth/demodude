@@ -52,7 +52,7 @@ jobs:
       - name: Generate new version
         id: new_version
         run: |
-          type_of_pr=$(gh pr list --state merged --base main --json labels | jq '.[0].labels[0].name')
+          type_of_pr=$(gh pr list --state merged --base master --json labels | jq '.[0].labels[0].name')
           version=$(gh release list -L 1 --json tagName | jq ' .[0].tagName ')
           version=${version:2:-1}
           type_of_pr="${type_of_pr:1:-1}"
@@ -79,12 +79,6 @@ jobs:
           new_ver="v${breaking}.${feat}.${patch}"
           echo "$new_ver"
           echo "NEW_VER=$new_ver" >> $GITHUB_OUTPUT
-          
-      - name: Install cosign
-        if: github.event_name != 'pull_request'
-        uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 #v3.5.0
-        with:
-          cosign-release: 'v2.2.4'
 
       # Set up BuildKit Docker container builder to be able to build
       # multi-platform images and export cache
@@ -106,15 +100,7 @@ jobs:
       # repository is public to avoid leaking data.  If you would like to publish
       # transparency data even for private images, pass --force to cosign below.
       # https://github.com/sigstore/cosign
-      - name: Sign the published Docker image
-        
-        env:
-          # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
-          TAGS: ${{env.REGISTRY}}/${{steps.image.outputs.lowercase}}:${{steps.new_version.outputs.NEW_VER}}
-          DIGEST: ${{ steps.build-and-push.outputs.digest }}
-        # This step uses the identity token to provision an ephemeral certificate
-        # against the sigstore community Fulcio instance.
-        run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+      
       - name: Create a release to match the package
         run: |
           gh release create ${{steps.new_version.outputs.NEW_VER}} --generate-notes
