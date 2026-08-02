@@ -11,6 +11,7 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
+  GH_TOKEN: ${{ github.token }}
   
 jobs:
   approved:
