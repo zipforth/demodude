@@ -120,4 +120,4 @@ jobs:
           -H "Authorization: Bearer ${{ secrets.PAT }}" \
           -H "X-GitHub-Api-Version: 2026-03-10" \
           https://api.github.com/repos/zipforth/helm-demodude/dispatches \
-          -d '{"event_type":"image_updated","client_payload":{"semver":${{steps.new_version.outputs.NEW_VER}} }}'
+          -d '{"event_type":"image_updated","client_payload":{"semver": "${{steps.new_version.outputs.NEW_VER}}" }}'
