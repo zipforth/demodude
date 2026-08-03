@@ -100,7 +100,7 @@ jobs:
         if: ${{ steps.new_version.outputs.IS_CODE_EDIT == 'yes' }}
         id: build-and-push
         run: |
-          docker buildx build --push -t ${{env.REGISTRY}}/${{steps.image.outputs.lowercase}}:${{steps.new_version.outputs.NEW_VER}} --cache-to type=gha,mode=max --cache-from type=gha .
+          docker buildx build --push --platform linux/amd64 -t ${{env.REGISTRY}}/${{steps.image.outputs.lowercase}}:${{steps.new_version.outputs.NEW_VER}} --cache-to type=gha,mode=max --cache-from type=gha .
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker
