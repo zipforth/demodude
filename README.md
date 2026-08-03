@@ -10,7 +10,7 @@ The game is playable between 2 players, one using WASD to move and left shift to
 - Open your favorite flavor of linux, as long as it has python3 (WSL should work as well)
 - Clone this repo and step into the demodude directory (where all the html files are)
 - run the standalone shell script via `sh startlocal`
-- Open a browser and go to localhost:9999 to play
+- Open a browser and go to localhost:9999 to play.
 
 ## Run via docker container
 In the following commands, replace \<available-port\> with whatever available port on the local machine is preferred. 9999 is probably open on most machines.
@@ -18,5 +18,5 @@ In the following commands, replace \<available-port\> with whatever available po
 - Any image builder should work, but for the sake of example, docker will be used.
 - From the directory where the Dockerfile is, run `docker build -t demodude:v0.1.0 .`
 - Run `docker run -p <available-port>:9999 demodude:v0.1.0`
-- Open a browser and go to localhost:\<available-port\> to play
+- Open a browser and go to localhost:\<available-port\> to play.
 
