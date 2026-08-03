@@ -112,3 +112,12 @@ jobs:
         if: ${{ steps.new_version.outputs.IS_CODE_EDIT == 'yes' }}
         run: |
           gh release create ${{steps.new_version.outputs.NEW_VER}} --generate-notes
+      - name: Push to helm chart
+        run: |
+          curl -L \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          -H "X-GitHub-Api-Version: 2026-03-10" \
+          https://api.github.com/repos/zipforth/helm-demodude/dispatches \
+          -d '{"event_type":"image_updated","client_payload":{"semver":${{steps.new_version.outputs.NEW_VER}}'
