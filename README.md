@@ -1,5 +1,5 @@
 Thanks for checking out my pet project! It's very much a work in progress, but it's functional for two players sharing a keyboard.
-## About
+# About
 This is my take on an arcade game called bomberman, or rather my take on the flash game copycat of bomberman that I had played too much of in middle school. Demodude is a portmanteau of demolition dude, and I attempted to design the characters to look like they're wearing those huge bomb squad suits.
 
 The current implementation is designed to be built as a docker image, however it can be run standalone on linux or WSL. See below for an explainer of each run type.
