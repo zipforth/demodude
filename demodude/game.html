@@ -35,6 +35,27 @@ var isPlayerAlive=[false,false,false,false];
 var isPlayer=[false,false,false,false];
 var cookieE=parseInt(getCookie('envNum'));
 var cookieP=parseInt(getCookie('playerNum'));
+
+function actionNPC()
+{
+	for( let playerIndex=0;playerIndex<4;playerIndex++)
+	{
+		if(!isPlayer[playerIndex] && isPlayerAlive[playerIndex])
+		{
+			player_num= "p" + (playerIndex + 1)
+			console.log("player "+player_num+ "moved")
+			var temp=horiTest(player_num);
+			if(temp[0])
+			{	
+				
+				rightArrowPressed(player_num,temp[1]);
+			}
+		}
+
+	}
+
+}
+
 for(let i = 0;i<cookieP;i++)
 {
 	isPlayerAlive[i]=true;
@@ -576,6 +597,7 @@ function leftArrowPressed(player,x) {
 		}
 	}
 	setInterval(moveSelection,100);
+	setInterval(actionNPC,2000);
 	document.onkeydown=e => {
 		if( !down[e.keyCode]){
 			down[e.keyCode] = true;
@@ -651,6 +673,14 @@ function leftArrowPressed(player,x) {
 			}
 		}
 	}
+	function sleep(ms) 
+	{
+  		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+
+
+	
 
 	
 </script>
