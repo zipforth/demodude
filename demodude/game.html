@@ -33,8 +33,142 @@ var p1bcount=1;
 var p1brad=2;
 var isPlayerAlive=[false,false,false,false];
 var isPlayer=[false,false,false,false];
+var NPC_direction=["left","left","left","left"]
 var cookieE=parseInt(getCookie('envNum'));
 var cookieP=parseInt(getCookie('playerNum'));
+
+function actionNPC()
+{
+	for( let playerIndex=0;playerIndex<4;playerIndex++)
+	{
+		if(!isPlayer[playerIndex] && isPlayerAlive[playerIndex])
+		{
+			player_num= "p" + (playerIndex + 1)
+			console.log("player "+player_num+ "moved")
+			var element = document.getElementById(player_num);
+			var switch_success=false;
+			switch (NPC_direction[playerIndex])
+			{
+				case "left":
+					if(isLeftAvailable(element,player_num))
+					{
+						var temp=horiTest(player_num);
+						if(temp[0])
+						{
+							leftArrowPressed(player_num,temp[1]);
+							switch_success=true;
+						}	
+					}
+					break;
+				case "right":
+					if(isRightAvailable(element,player_num))
+					{
+						var temp=horiTest(player_num);
+						if(temp[0])
+						{
+							rightArrowPressed(player_num,temp[1]);
+							switch_success=true;
+						}	
+					}
+					break;
+				case "up":
+					if(isUpAvailable(element,player_num))
+					{
+						var temp=vertTest(player_num);
+						if(temp[0])
+						{
+							upArrowPressed(player_num,temp[1]);
+							switch_success=true;
+						}	
+					}
+					break;
+				case "down":
+					if(isDownAvailable(element,player_num))
+					{
+						var temp=vertTest(player_num);
+						if(temp[0])
+						{
+							downArrowPressed(player_num,temp[1]);
+							switch_success=true;
+						}	
+					}
+					break;
+			}
+			if(!switch_success)
+			{
+				var temp=horiTest(player_num);
+				if(isLeftAvailable(element,player_num) && temp[0])
+				{
+					leftArrowPressed(player_num,temp[1]);
+					NPC_direction[playerIndex] = "left";
+				}
+				else
+				{
+					if(isRightAvailable(element,player_num) && temp[0])
+					{
+						rightArrowPressed(player_num,temp[1]);
+						NPC_direction[playerIndex] = "right";
+					}
+					else
+					{
+						var temp=vertTest(player_num);
+						if(isUpAvailable(element,player_num) && temp[0])
+						{
+							upArrowPressed(player_num,temp[1]);
+							NPC_direction[playerIndex] = "up";
+						}
+						else
+						{
+							if(isDownAvailable(element,player_num) && temp[0])
+							{
+								downArrowPressed(player_num,temp[1]);
+								NPC_direction[playerIndex] = "down";
+							}
+						}
+					}
+
+
+
+				}
+			
+			}
+
+		}
+
+	}
+}
+function isLeftAvailable(element,player_num)
+{
+	if(parseInt(element.style.left)>35 && checkRight(parseInt(element.style.top)+30,parseInt(element.style.left),player_num))
+    {
+		return true;
+	}
+	return false;
+}
+function isRightAvailable(element,player_num)
+{
+	if(parseInt(element.style.left)<670 && checkRight(parseInt(element.style.top)+30,parseInt(element.style.left)+50,player_num))
+	{
+		return true;
+	}
+	return false;
+}
+function isUpAvailable(element,player_num)
+{
+	if(parseInt(element.style.top)>20 && checkRight(parseInt(element.style.top)+10,parseInt(element.style.left)+30,player_num))
+    {
+		return true;
+	}
+	return false;
+}
+function isDownAvailable(element,player_num)
+{
+	if(parseInt(element.style.top)<420 && checkRight(parseInt(element.style.top)+65,parseInt(element.style.left)+30,player_num))
+    {
+		return true;
+	}
+	return false;
+}
 for(let i = 0;i<cookieP;i++)
 {
 	isPlayerAlive[i]=true;
@@ -576,6 +710,7 @@ function leftArrowPressed(player,x) {
 		}
 	}
 	setInterval(moveSelection,100);
+	setInterval(actionNPC,100);
 	document.onkeydown=e => {
 		if( !down[e.keyCode]){
 			down[e.keyCode] = true;
