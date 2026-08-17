@@ -47,6 +47,7 @@ function actionNPC()
 			console.log("player "+player_num+ "moved")
 			var element = document.getElementById(player_num);
 			var switch_success=false;
+			//if a direction has previously been assigned, check if still valid and continue in that direction
 			switch (NPC_direction[playerIndex])
 			{
 				case "left":
@@ -94,6 +95,7 @@ function actionNPC()
 					}
 					break;
 			}
+			//if the previous direction wasn't valid, change direction
 			if(!switch_success)
 			{
 				var temp=horiTest(player_num);
